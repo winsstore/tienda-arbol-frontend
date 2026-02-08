@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - MiTienda</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #f59e0b;
+            --dark-color: #1e293b;
+            --light-color: #f8fafc;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --gray-color: #64748b;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f0f4f8, #e2e8f0);
+            color: var(--dark-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: var(--gray-color);
+            font-size: 1.1rem;
+        }
+
+        .checkout-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--dark-color);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        /* ===== FORMULARIO ===== */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* ===== RESUMEN DE PEDIDO ===== */
+        .cart-summary {
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            border: 2px solid #e2e8f0;
+        }
+
+        .cart-items {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item-name {
+            font-weight: 600;
+        }
+
+        .cart-item-qty {
+            color: var(--gray-color);
+            font-size: 0.9rem;
+        }
+
+        .total-summary {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid var(--primary-color);
+            margin-top: 20px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            font-weight: 600;
+        }
+
+        .total-row.total {
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            border-top: 2px solid #e2e8f0;
+            padding-top: 15px;
+            margin-top: 10px;
+        }
+
+        /* ===== BOTÓN DE ENVÍO ===== */
+        .btn-submit {
+            background: linear-gradient(135deg, var(--success-color), #0da271);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            margin-top: 20px;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-submit:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-back {
+            background: linear-gradient(135deg, var(--gray-color), #475569);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .btn-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(100, 116, 139, 0.3);
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 40px;
+            color: var(--gray-color);
+        }
+
+        .whatsapp-icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+
+        /* ===== RADIO BUTTONS ===== */
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 10px 20px;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .radio-group label:hover {
+            background: #edf2f7;
+            border-color: var(--primary-color);
+        }
+
+        .radio-group input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .radio-group input[type="radio"]:checked+span {
+            color: var(--primary-color);
+        }
+
+        .radio-group label input[type="radio"]:checked {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .radio-group label input[type="radio"]:checked+span::before {
+            background: var(--primary-color);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💳 Checkout</h1>
+            <p>Completa tus datos para finalizar el pedido</p>
+        </div>
+
+        <div class="checkout-container">
+            <!-- Formulario de datos -->
+            <div class="checkout-form">
+                <h2 class="section-title">📦 Datos de Envío</h2>
+
+                <button class="btn-back" onclick="window.history.back()">
+                    ← Volver al Carrito
+                </button>
+
+                <form id="checkoutForm">
+                    <div class="form-group">
+                        <label for="nombre">Nombre Completo *</label>
+                        <input type="text" id="nombre" required placeholder="Ej: Juan Pérez">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefono">Teléfono *</label>
+                        <input type="tel" id="telefono" required placeholder="Ej: +58 123 456 7890">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Correo Electrónico</label>
+                        <input type="email" id="email" placeholder="tu@email.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="direccion">Dirección de Envío *</label>
+                        <textarea id="direccion" required
+                            placeholder="Dirección completa, referencia, ciudad"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="metodoPago">Método de Pago *</label>
+                        <select id="metodoPago" required>
+                            <option value="">Selecciona un método</option>
+                            <option value="zelle">Zelle</option>
+                            <option value="transferencia">Transferencia Bancaria</option>
+                            <option value="efectivo">Efectivo (Entrega)</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>¿Ya realizaste el pago?</label>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="pagoRealizado" value="no" checked>
+                                No, aún no he pagado
+                            </label>
+                            <label>
+                                <input type="radio" name="pagoRealizado" value="si">
+                                Sí, ya realicé el pago
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="referenciaField" style="display:none;">
+                        <label for="referenciaPago">Últimos 4 dígitos de referencia *</label>
+                        <input type="text" id="referenciaPago" maxlength="4" placeholder="Ej: 1234" pattern="[0-9]{4}">
+                        <small style="color: #666; display: block; margin-top: 5px;">
+                            Ingresa los últimos 4 dígitos de tu comprobante de pago
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notas">Notas Adicionales</label>
+                        <textarea id="notas" placeholder="Instrucciones especiales, color preferido, etc."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-submit" id="submitBtn">
+                        <span class="whatsapp-icon">📱</span>
+                        Enviar Pedido a WhatsApp
+                    </button>
+                </form>
+            </div>
+
+            <!-- Resumen del pedido -->
+            <div class="cart-summary">
+                <h2 class="section-title">📝 Resumen del Pedido</h2>
+
+                <div class="cart-items" id="cartItemsSummary">
+                    <p class="empty-cart">Cargando carrito...</p>
+                </div>
+
+                <div class="total-summary">
+                    <div class="total-row">
+                        <span>Subtotal:</span>
+                        <span id="subtotalUSD">$0.00</span>
+                    </div>
+                    <div class="total-row">
+                        <span>Moneda Local:</span>
+                        <span id="subtotalLocal">Bs. 0.00</span>
+                    </div>
+                    <div class="total-row total">
+                        <span>Total:</span>
+                        <span id="totalDisplay">$0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== VARIABLES GLOBALES =====
+        let carrito = [];
+        let tasaCambio = 36.50;
+        let SIMBOLO_LOCAL = 'Bs.';
+
+        // ===== CARGAR CARRITO DEL LOCALSTORAGE =====
+        function cargarCarrito() {
+            const carritoGuardado = localStorage.getItem('carritoMiTienda');
+            const tasaGuardada = localStorage.getItem('tasaCambioMiTienda');
+
+            if (carritoGuardado) {
+                carrito = JSON.parse(carritoGuardado);
+            }
+
+            if (tasaGuardada) {
+                const config = JSON.parse(tasaGuardada);
+                tasaCambio = config.tasaCambio || 36.50;
+                SIMBOLO_LOCAL = config.monedaLocal || 'Bs.';
+            }
+        }
+
+        // ===== MOSTRAR RESUMEN DEL CARRITO =====
+        function mostrarResumenCarrito() {
+            const cartItemsSummary = document.getElementById('cartItemsSummary');
+            const subtotalUSD = document.getElementById('subtotalUSD');
+            const subtotalLocal = document.getElementById('subtotalLocal');
+            const totalDisplay = document.getElementById('totalDisplay');
+
+            if (carrito.length === 0) {
+                cartItemsSummary.innerHTML = '<p class="empty-cart">❌ Carrito vacío</p>';
+                return;
+            }
+
+            let html = '';
+            let totalUSD = 0;
+            let totalLocal = 0;
+
+            carrito.forEach(item => {
+                const subtotalItemUSD = item.precio * item.cantidad;
+                const subtotalItemLocal = subtotalItemUSD * tasaCambio;
+                totalUSD += subtotalItemUSD;
+                totalLocal += subtotalItemLocal;
+
+                html += `
+                    <div class="cart-item">
+                        <div>
+                            <div class="cart-item-name">${item.nombre}</div>
+                            <div class="cart-item-qty">${item.cantidad} unidades × $${item.precio.toFixed(2)}</div>
+                        </div>
+                        <div>
+                            <div>$${subtotalItemUSD.toFixed(2)}</div>
+                            <div style="font-size: 0.85rem; color: var(--gray-color);">${SIMBOLO_LOCAL} ${subtotalItemLocal.toFixed(2)}</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            cartItemsSummary.innerHTML = html;
+            subtotalUSD.textContent = `$${totalUSD.toFixed(2)}`;
+            subtotalLocal.textContent = `${SIMBOLO_LOCAL} ${totalLocal.toFixed(2)}`;
+            totalDisplay.innerHTML = `
+                $${totalUSD.toFixed(2)}<br>
+                <span style="font-size: 0.9rem; color: var(--gray-color);">${SIMBOLO_LOCAL} ${totalLocal.toFixed(2)}</span>
+            `;
+        }
+
+        // Mostrar/ocultar campo de referencia según selección
+        document.querySelectorAll('input[name="pagoRealizado"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                const referenciaField = document.getElementById('referenciaField');
+                const referenciaInput = document.getElementById('referenciaPago');
+
+                if (this.value === 'si') {
+                    referenciaField.style.display = 'block';
+                    referenciaInput.required = true;
+                } else {
+                    referenciaField.style.display = 'none';
+                    referenciaInput.required = false;
+                    referenciaInput.value = '';
+                }
+            });
+        });
+
+        // ===== ENVIAR PEDIDO A WHATSAPP =====
+        // ===== ENVIAR PEDIDO A WHATSAPP =====
+        function enviarPedidoWhatsApp(datos) {
+            // Construir mensaje
+            let mensaje = `*✨ NUEVO PEDIDO - MiTienda*%0A%0A`;
+            mensaje += `*📋 DATOS DEL CLIENTE:*%0A`;
+            mensaje += `📛 Nombre: ${datos.nombre}%0A`;
+            mensaje += `📲 Teléfono: ${datos.telefono}%0A`;
+
+            if (datos.email) {
+                mensaje += `✉️ Email: ${datos.email}%0A`;
+            }
+
+            mensaje += `📍 Dirección: ${datos.direccion}%0A`;
+            mensaje += `💳 Método de Pago: ${datos.metodoPago}%0A`;
+
+            // Agregar información del pago
+            const pagoRealizado = document.querySelector('input[name="pagoRealizado"]:checked').value;
+            if (pagoRealizado === 'si') {
+                const referencia = document.getElementById('referenciaPago').value;
+                mensaje += `✅ Pago: Ya realizado%0A`;
+                mensaje += `🔢 Referencia: ${referencia}%0A`;
+            } else {
+                mensaje += `⏳ Pago: Pendiente de realizar%0A`;
+            }
+
+            if (datos.notas) {
+                mensaje += `💬 Notas: ${datos.notas}%0A`;
+            }
+
+            mensaje += `%0A*🛍️ PRODUCTOS:*%0A`;
+
+            let totalUSD = 0;
+            let totalLocal = 0;
+
+            carrito.forEach((item, index) => {
+                const subtotalUSD = item.precio * item.cantidad;
+                const subtotalLocal = subtotalUSD * tasaCambio;
+                totalUSD += subtotalUSD;
+                totalLocal += subtotalLocal;
+
+                mensaje += `${index + 1}. ${item.nombre}%0A`;
+                mensaje += `   Cantidad: ${item.cantidad} × $${item.precio.toFixed(2)} = $${subtotalUSD.toFixed(2)}%0A`;
+                mensaje += `   ${SIMBOLO_LOCAL} ${(subtotalLocal).toFixed(2)}%0A%0A`;
+            });
+
+            mensaje += `*💵 TOTAL:*%0A`;
+            mensaje += `$${totalUSD.toFixed(2)} (${SIMBOLO_LOCAL} ${totalLocal.toFixed(2)})%0A%0A`;
+            mensaje += `*📅 Fecha del pedido:* ${new Date().toLocaleString('es-ES')}`;
+
+            // Número de WhatsApp (cambiar por tu número)
+            const numeroWhatsApp = '+584121234567'; // ← CAMBIA ESTO POR TU NÚMERO
+
+            // Abrir WhatsApp
+            const url = `https://wa.me/${numeroWhatsApp.replace(/\D/g, '')}?text=${mensaje}`;
+            window.open(url, '_blank');
+        }
+
+        // ===== MANEJAR SUBMIT DEL FORMULARIO =====
+        document.getElementById('checkoutForm')?.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Enviando...';
+
+            // Validar referencia si el pago fue realizado
+            const pagoRealizado = document.querySelector('input[name="pagoRealizado"]:checked').value;
+            if (pagoRealizado === 'si') {
+                const referencia = document.getElementById('referenciaPago').value;
+                if (!referencia || referencia.length !== 4 || !/^\d{4}$/.test(referencia)) {
+                    alert('Por favor ingresa los 4 dígitos de referencia correctamente');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                    return;
+                }
+            }
+
+            // Obtener datos del formulario
+            const datos = {
+                nombre: document.getElementById('nombre').value,
+                telefono: document.getElementById('telefono').value,
+                email: document.getElementById('email').value,
+                direccion: document.getElementById('direccion').value,
+                metodoPago: document.getElementById('metodoPago').value,
+                notas: document.getElementById('notas').value
+            };
+
+            // Enviar a WhatsApp
+            enviarPedidoWhatsApp(datos);
+
+            // Limpiar carrito y redirigir
+            setTimeout(() => {
+                localStorage.removeItem('carritoMiTienda');
+                alert('✅ ¡Pedido enviado exitosamente!%0A%0ASerás redirigido a WhatsApp para completar tu compra.');
+
+                // Redirigir al inicio después de 2 segundos
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+            }, 1000);
+        });
+
+        // ===== INICIAR =====
+        document.addEventListener('DOMContentLoaded', function () {
+            cargarCarrito();
+            mostrarResumenCarrito();
+
+            // Verificar si el carrito está vacío
+            if (carrito.length === 0) {
+                setTimeout(() => {
+                    if (confirm('Tu carrito está vacío. ¿Quieres volver a la tienda?')) {
+                        window.location.href = 'index.html';
+                    }
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+
+</html>
