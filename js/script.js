@@ -19,7 +19,7 @@ function formatearMonedaLocal(monto) {
 function actualizarBannerTasa() {
     const rateElement = document.getElementById('exchangeRate');
     if (rateElement) {
-        rateElement.textContent = `${SIMBOLO_LOCAL} ${tasaCambio.toFixed(2)} por $1`;
+        rateElement.textContent = `${SIMBOLO_LOCAL} ${tasaCambio.toFixed(2)}`;
     }
 
     localStorage.setItem('tasaMiTienda', JSON.stringify({
@@ -150,7 +150,7 @@ function actualizarCarrito() {
                 <button class="btn-clear-cart" disabled>
                     🗑️ Vaciar Carrito
                 </button>
-                <button class="btn-checkout" disabled>Proceder al Pago</button>
+                <button class="btn-checkout" disabled>Procesar Pedido</button>
             </div>
         `;
         return;
@@ -171,10 +171,10 @@ function actualizarCarrito() {
                 <div class="cart-item-info">
                     <div class="cart-item-name">${item.nombre}</div>
                     <div class="cart-item-price">
-                        ${formatearUSD(item.precio)} / unidad
+                        ${formatearUSD(item.precio)}
                     </div>
                     <div class="cart-item-total">
-                        ${formatearUSD(subtotalUSD)} (${item.cantidad} unidades)
+                        ${formatearUSD(subtotalUSD)} (${item.cantidad} und)
                     </div>
                     <div class="cart-item-total" style="font-size: 0.9rem; color: var(--gray-color);">
                         ${formatearMonedaLocal(subtotalLocal)}
@@ -200,7 +200,7 @@ function actualizarCarrito() {
             <button class="btn-clear-cart" id="clearCartBtn">
                 🗑️ Vaciar Carrito
             </button>
-            <button class="btn-checkout" id="checkoutBtn">Proceder al Pago</button>
+            <button class="btn-checkout" id="checkoutBtn">Procesar pedido</button>
         </div>
     `;
 
@@ -282,7 +282,7 @@ function mostrarNotificacion(mensaje) {
     setTimeout(() => {
         notification.style.animation = 'slideOut 0.3s ease';
         setTimeout(() => notification.remove(), 300);
-    }, 2000);
+    }, 1000);
 }
 
 // Animaciones CSS para notificaciones
@@ -484,7 +484,9 @@ function cargarProductos(productos) {
     productosPaginados.forEach(producto => {
         html += `
             <div class="product-card" data-product-id="${producto.id}">
-                <img src="${producto.imagen}" alt="${producto.nombre}" class="product-img">
+                <div class="product-img-container">
+                    <img src="${producto.imagen}" alt="${producto.nombre}" class="product-img">
+                </div>
                 <div class="product-info">
                     <div class="product-category">${producto.categoria}</div>
                     <h3 class="product-name">${producto.nombre}</h3>
@@ -493,13 +495,14 @@ function cargarProductos(productos) {
                         <span class="price-primary">$${producto.precio.toFixed(2)}</span>
                         <span class="price-secondary">${SIMBOLO_LOCAL} ${(producto.precio * tasaCambio).toFixed(2)}</span>
                     </div>
+
                     <div class="product-quantity-controls">
                         <button class="quantity-btn decrease">-</button>
                         <span class="quantity-display">1</span>
                         <button class="quantity-btn increase">+</button>
                     </div>
                     <button class="btn-add-to-cart" data-id="${producto.id}">
-                        Añadir al Carrito
+                        Añadir
                     </button>
                 </div>
             </div>
@@ -516,27 +519,29 @@ function cargarProductos(productos) {
     agregarControlesPaginacion(productos.length);
 
     // Eventos para botones + y -
-    document.querySelectorAll('.decrease').forEach(button => {
-        button.addEventListener('click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const display = this.nextElementSibling;
-            let cantidad = parseInt(display.textContent);
-            if (cantidad > 1) {
-                display.textContent = cantidad - 1;
-            }
-        });
+document.querySelectorAll('.decrease').forEach(button => {
+    button.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const card = this.closest('.product-card');
+        const display = card.querySelector('.quantity-display');
+        let cantidad = parseInt(display.textContent);
+        if (cantidad > 1) {
+            display.textContent = cantidad - 1;
+        }
     });
+});
 
-    document.querySelectorAll('.increase').forEach(button => {
-        button.addEventListener('click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const display = this.previousElementSibling;
-            let cantidad = parseInt(display.textContent);
-            display.textContent = cantidad + 1;
-        });
+document.querySelectorAll('.increase').forEach(button => {
+    button.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const card = this.closest('.product-card');
+        const display = card.querySelector('.quantity-display');
+        let cantidad = parseInt(display.textContent);
+        display.textContent = cantidad + 1;
     });
+});
 
     // Evento para botón "Añadir al Carrito"
     document.querySelectorAll('.btn-add-to-cart').forEach(button => {
@@ -555,7 +560,7 @@ function cargarProductos(productos) {
     });
 }
 
-// ===== AGREGAR CONTROLES DE PAGINACIÓN =====
+// ===== AGREGAR CONTROLES DE PAGINACIÓN OPTIMIZADA =====
 function agregarControlesPaginacion(totalProductos) {
     const container = document.getElementById('productos-container');
 
@@ -565,27 +570,62 @@ function agregarControlesPaginacion(totalProductos) {
         return;
     }
 
+    // Función para generar botones de página inteligentes
+    function generarBotonesPagina() {
+        let botonesHTML = '';
+
+        // Siempre mostrar página 1
+        botonesHTML += `
+            <button class="pagination-btn ${paginaActual === 1 ? 'active' : ''}" data-page="1">
+                1
+            </button>
+        `;
+
+        // Si estamos lejos de la página 1, mostrar "..."
+        if (paginaActual > 4) {
+            botonesHTML += `<span class="pagination-ellipsis">...</span>`;
+        }
+
+        // Mostrar páginas alrededor de la actual (máximo 3 a cada lado)
+        const startPage = Math.max(2, paginaActual - 2);
+        const endPage = Math.min(totalPages - 1, paginaActual + 2);
+
+        for (let i = startPage; i <= endPage; i++) {
+            botonesHTML += `
+                <button class="pagination-btn ${i === paginaActual ? 'active' : ''}" data-page="${i}">
+                    ${i}
+                </button>
+            `;
+        }
+
+        // Si estamos lejos de la última página, mostrar "..."
+        if (paginaActual < totalPages - 3) {
+            botonesHTML += `<span class="pagination-ellipsis">...</span>`;
+        }
+
+        // Siempre mostrar última página (si no es la página 1)
+        if (totalPages > 1) {
+            botonesHTML += `
+                <button class="pagination-btn ${paginaActual === totalPages ? 'active' : ''}" data-page="${totalPages}">
+                    ${totalPages}
+                </button>
+            `;
+        }
+
+        return botonesHTML;
+    }
+
     let paginacionHTML = `
         <div class="pagination-controls">
-            <button class="pagination-btn prev" ${paginaActual === 1 ? 'disabled' : ''} data-action="prev">
+            <button class="pagination-btn prev ${paginaActual === 1 ? 'disabled' : ''}" data-action="prev">
                 ← Anterior
             </button>
             
             <div class="pagination-numbers">
-    `;
-
-    for (let i = 1; i <= totalPages; i++) {
-        paginacionHTML += `
-            <button class="pagination-btn ${i === paginaActual ? 'active' : ''}" data-page="${i}">
-                ${i}
-            </button>
-        `;
-    }
-
-    paginacionHTML += `
+                ${generarBotonesPagina()}
             </div>
             
-            <button class="pagination-btn next" ${paginaActual === totalPages ? 'disabled' : ''} data-action="next">
+            <button class="pagination-btn next ${paginaActual === totalPages ? 'disabled' : ''}" data-action="next">
                 Siguiente →
             </button>
         </div>
@@ -597,6 +637,7 @@ function agregarControlesPaginacion(totalProductos) {
 
     container.parentNode.insertBefore(paginacionContainer, container.nextSibling);
 
+    // Eventos para botones de paginación
     paginacionContainer.addEventListener('click', function (e) {
         if (e.target.classList.contains('pagination-btn')) {
             if (e.target.hasAttribute('data-page')) {
@@ -655,3 +696,4 @@ document.getElementById('clearStorageBtn')?.addEventListener('click', function (
         alert('✅ localStorage limpiado');
     }
 });
+

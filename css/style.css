@@ -1,9 +1,9 @@
 /* ===== VARIABLES Y RESET ===== */
 :root {
-    --primary-color: #6366f1;
+    --primary-color: #51367A;
     --secondary-color: #8b5cf6;
     --accent-color: #f59e0b;
-    --dark-color: #1e293b;
+    --dark-color: #819680;
     --light-color: #f8fafc;
     --success-color: #10b981;
     --danger-color: #ef4444;
@@ -72,7 +72,7 @@ body {
 
 /* ===== HEADER ===== */
 .header {
-    background: white;
+    background: rgb(150, 94, 235);
     box-shadow: var(--box-shadow);
     position: sticky;
     top: 0;
@@ -100,7 +100,7 @@ body {
 
 .nav a {
     text-decoration: none;
-    color: var(--dark-color);
+    color: white;
     font-weight: 500;
     transition: var(--transition);
     position: relative;
@@ -135,7 +135,7 @@ body {
 }
 
 .btn-cart {
-    background: white;
+    background: #D2BAF5;
     border: 2px solid var(--primary-color);
     padding: 8px 16px;
     border-radius: 50px;
@@ -196,7 +196,7 @@ body {
 .productos-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 30px;
+    gap: 15px;
 }
 
 .product-card {
@@ -208,16 +208,27 @@ body {
     cursor: pointer;
 }
 
-.product-card:hover {
+/*.product-card:hover {
     transform: translateY(-10px);
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}*/
+
+/* ===== IMAGEN CUADRADA EN MÓVIL ===== */
+.product-img-container {
+    width: 100%;
+    height: 0;
+    padding-bottom: 100%; /* 1:1 aspect ratio */
+    position: relative;
+    background: #e2e8f0;
 }
 
 .product-img {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: 250px;
+    height: 100%;
     object-fit: cover;
-    background: #e2e8f0;
 }
 
 .product-info {
@@ -284,7 +295,7 @@ body {
 .ofertas-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
+    gap: 20px;
 }
 
 .oferta-card {
@@ -316,7 +327,7 @@ body {
 .oferta-card img {
     width: 100%;
     height: 250px;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .oferta-card h3 {
@@ -534,11 +545,13 @@ body {
 }
 
 .modal-footer {
+    width: 100%; /* ← Asegurar ancho completo */
     padding: 20px;
     border-top: 2px solid #e2e8f0;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column; /* ← Columna en móvil */
+    gap: 15px; /* ← Espacio entre elementos */
+    box-sizing: border-box; /* ← Incluir padding en el ancho */
 }
 
 .total-price {
@@ -645,6 +658,7 @@ body {
     border-radius: 50px;
     cursor: pointer;
     font-family: 'Poppins', sans-serif;
+    color: var(--dark-color);
     font-weight: 600;
     transition: var(--transition);
 }
@@ -662,7 +676,7 @@ body {
 
 /* ===== BANNER DE TASA DE CAMBIO ===== */
 .exchange-rate-banner {
-    background: linear-gradient(135deg, #f59e0b, #ea580c);
+    background: linear-gradient(135deg, #7EEB6D, #427C39);
     color: white;
     padding: 12px 0;
     text-align: center;
@@ -721,6 +735,8 @@ body {
     display: flex;
     flex-direction: column;
     gap: 5px;
+    flex: 1;
+    width: 100%;
 }
 
 .cart-total-primary {
@@ -803,14 +819,7 @@ body {
 }
 
 /* ===== BOTÓN DE VACIAR CARRITO ===== */
-.cart-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 2px solid #e2e8f0;
-}
+
 
 .btn-clear-cart {
     background: var(--danger-color);
@@ -1008,6 +1017,7 @@ body {
 
 .order-btn {
     background: #f1f5f9;
+    color: var(--dark-color);
     border: none;
     padding: 8px 20px;
     border-radius: 50px;
@@ -1030,3 +1040,135 @@ body {
     color: white;
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
+
+/* ===== ESTILOS PARA PAGINACIÓN OPTIMIZADA ===== */
+.pagination-ellipsis {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--gray-color);
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    user-select: none;
+}
+
+/* ===== SECCIÓN INFORMATIVA ===== */
+.info-section {
+    padding: 60px 0;
+    background: linear-gradient(to bottom, #f8fafc, #e2e8f0);
+}
+
+.info-grid {
+    display: grid;
+    gap: 25px;
+    justify-content: center;
+    align-items: center;
+}
+
+.info-card {
+    background: white;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+    border: 2px solid transparent;
+}
+
+.info-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    border-color: var(--dark-color);
+}
+
+.info-img {
+    width: 100%;
+    height: 300px;
+    object-fit: contain;
+    display: block;
+    transition: var(--transition);
+}
+
+.info-card:hover .info-img {
+    transform: scale(1.05);
+}
+
+/* Ocultar tercera imagen en móvil */
+.desktop-only {
+    display: block;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (min-width: 992px) {
+    /* PC: 3 tarjetas en fila */
+    .info-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .info-img {
+        height: 350px;
+    }
+}
+
+@media (max-width: 991px) {
+    /* Móvil/Tablet: 2 tarjetas en fila, ocultar tercera */
+    .info-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .desktop-only {
+        display: none !important;
+    }
+
+    .info-img {
+        height: 250px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Móvil pequeño: 2 tarjetas en columna */
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ===== BOTONES DE CANTIDAD EN MÓVIL ===== */
+@media (max-width: 768px) {
+    .product-quantity-controls {
+        display: grid;
+        grid-template-rows: auto auto;
+        grid-template-columns: 1fr auto 1fr;
+        justify-items: center;
+        align-items: center;
+        gap: 5px 3px;
+        padding: 15px;
+    }
+
+    .product-quantity-controls .quantity-display {
+        font-size: 1rem;
+        min-width: 60px;
+        height: 40px;
+        width: 60px;
+        grid-row: 1;
+        grid-column: 1 / span 3;
+    }
+
+    /* Botones más pequeños en móvil */
+    .product-quantity-controls .quantity-btn {
+        width: 50px; /* ← Ancho más pequeño */
+        height: 35px; /* ← Altura más pequeña */
+        font-size: 1rem; /* ← Fuente más pequeña */
+        padding: 0;
+    }
+
+    .product-quantity-controls .decrease {
+        grid-row: 2;
+        grid-column: 1;
+    }
+
+    .product-quantity-controls .increase {
+        grid-row: 2;
+        grid-column: 3;
+    }
+}
+

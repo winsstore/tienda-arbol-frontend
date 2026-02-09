@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://twemoji.maxcdn.com/v/latest/svg/1f4b0.svg">
     <title>Checkout - MiTienda</title>
     <style>
         * {
@@ -275,64 +276,193 @@
         .radio-group label input[type="radio"]:checked+span::before {
             background: var(--primary-color);
         }
+
+        /* ===== TARJETA DE DATOS DE PAGO ===== */
+        .payment-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 2px solid var(--gray-color);
+        }
+
+        .payment-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .payment-header h3 {
+            font-size: 1.5rem;
+            color: var(--gray-color);
+            font-weight: 700;
+        }
+
+        .payment-body {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .payment-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 15px;
+            background: #f8fafc;
+            border-radius: 8px;
+            transition: var(--transition);
+            border-left: 4px solid var(--gray-color);
+        }
+
+        /*.payment-item:hover {
+    background: #e0e7ff;
+    transform: translateX(5px);
+}*/
+
+        .payment-icon {
+            font-size: 2rem;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .payment-info {
+            flex: 1;
+        }
+
+        .payment-label {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--gray-color);
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .payment-value {
+            display: block;
+            font-size: 1.1rem;
+            color: var(--dark-color);
+            font-weight: 700;
+        }
+
+        .payment-footer {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .payment-footer p {
+            color: var(--gray-color);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .payment-card {
+                padding: 20px;
+            }
+
+            .payment-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .payment-icon {
+                font-size: 2.5rem;
+            }
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
         <div class="header">
-            <h1>💳 Checkout</h1>
-            <p>Completa tus datos para finalizar el pedido</p>
+            <h1>💳 Realizar pedido</h1>
+            <p>Completa los datos para finalizar el pedido</p>
         </div>
 
         <div class="checkout-container">
             <!-- Formulario de datos -->
             <div class="checkout-form">
-                <h2 class="section-title">📦 Datos de Envío</h2>
+                <h2 class="section-title">📦 Datos</h2>
 
                 <button class="btn-back" onclick="window.history.back()">
                     ← Volver al Carrito
                 </button>
 
+                <!-- ===== DATOS DE PAGO ===== -->
+                <div class="payment-card">
+                    <!--
+                    <div class="payment-header">
+                        <h3>📱 Datos de Pago</h3>
+                    </div>
+                -->
+                    <div class="payment-body">
+                        <div class="payment-item">
+                            <!--
+            <span class="payment-icon"></span>
+            -->
+                            <div class="payment-info">
+                                <span class="payment-label">Banesco (0134)</span>
+                                <span class="payment-label">V 30 330 289</span>
+                                <span class="payment-label">0414 236 2414</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!--
+    <div class="payment-footer">
+        <p>📲 Realiza tu pago y envíanos el comprobante por WhatsApp</p>
+    </div>
+    -->
+                </div>
+
+
+
                 <form id="checkoutForm">
                     <div class="form-group">
-                        <label for="nombre">Nombre Completo *</label>
-                        <input type="text" id="nombre" required placeholder="Ej: Juan Pérez">
+                        <label for="nombre">Nombre *</label>
+                        <input type="text" id="nombre" required placeholder="Ej: Juan">
                     </div>
-
+                    <!--
                     <div class="form-group">
                         <label for="telefono">Teléfono *</label>
                         <input type="tel" id="telefono" required placeholder="Ej: +58 123 456 7890">
                     </div>
-
+    
                     <div class="form-group">
                         <label for="email">Correo Electrónico</label>
                         <input type="email" id="email" placeholder="tu@email.com">
                     </div>
-
+                    
                     <div class="form-group">
                         <label for="direccion">Dirección de Envío *</label>
                         <textarea id="direccion" required
                             placeholder="Dirección completa, referencia, ciudad"></textarea>
                     </div>
-
+                
                     <div class="form-group">
                         <label for="metodoPago">Método de Pago *</label>
                         <select id="metodoPago" required>
                             <option value="">Selecciona un método</option>
-                            <option value="zelle">Zelle</option>
-                            <option value="transferencia">Transferencia Bancaria</option>
-                            <option value="efectivo">Efectivo (Entrega)</option>
-                            <option value="otro">Otro</option>
+                            <option value="zelle">Pago móvil</option>
+                            <option value="transferencia">Tarjeta</option>
+                            <option value="efectivo">Efectivo</option>
+                            <option value="otro">Biopago</option>
                         </select>
                     </div>
+                -->
 
                     <div class="form-group">
-                        <label>¿Ya realizaste el pago?</label>
+                        <label>¿Realizaste el pago móvil?</label>
                         <div class="radio-group">
                             <label>
                                 <input type="radio" name="pagoRealizado" value="no" checked>
-                                No, aún no he pagado
+                                No pagaré con pago móvil
                             </label>
                             <label>
                                 <input type="radio" name="pagoRealizado" value="si">
@@ -351,7 +481,7 @@
 
                     <div class="form-group">
                         <label for="notas">Notas Adicionales</label>
-                        <textarea id="notas" placeholder="Instrucciones especiales, color preferido, etc."></textarea>
+                        <textarea id="notas" placeholder="Sugerencias, etc."></textarea>
                     </div>
 
                     <button type="submit" class="btn-submit" id="submitBtn">
@@ -375,7 +505,7 @@
                         <span id="subtotalUSD">$0.00</span>
                     </div>
                     <div class="total-row">
-                        <span>Moneda Local:</span>
+                        <span>Bs:</span>
                         <span id="subtotalLocal">Bs. 0.00</span>
                     </div>
                     <div class="total-row total">
@@ -388,6 +518,30 @@
     </div>
 
     <script>
+
+        // ===== SISTEMA DE NUMERACIÓN DE PEDIDOS =====
+        function obtenerSiguienteNumeroPedido() {
+            try {
+                // Obtener número actual de localStorage
+                let numeroActual = parseInt(localStorage.getItem('numeroPedido')) || 1;
+
+                // Si llega a 9999, resetear a 1
+                if (numeroActual > 9999) {
+                    numeroActual = 1;
+                }
+
+                // Formatear con ceros (0001, 0002, etc.)
+                const numeroFormateado = numeroActual.toString().padStart(4, '0');
+
+                // Incrementar para el próximo pedido
+                localStorage.setItem('numeroPedido', numeroActual + 1);
+
+                return numeroFormateado;
+            } catch (error) {
+                console.error('Error en numeración de pedidos:', error);
+                return '0001'; // Fallback
+            }
+        }
         // ===== VARIABLES GLOBALES =====
         let carrito = [];
         let tasaCambio = 36.50;
@@ -435,7 +589,7 @@
                     <div class="cart-item">
                         <div>
                             <div class="cart-item-name">${item.nombre}</div>
-                            <div class="cart-item-qty">${item.cantidad} unidades × $${item.precio.toFixed(2)}</div>
+                            <div class="cart-item-qty">${item.cantidad} und × $${item.precio.toFixed(2)}</div>
                         </div>
                         <div>
                             <div>$${subtotalItemUSD.toFixed(2)}</div>
@@ -472,36 +626,30 @@
         });
 
         // ===== ENVIAR PEDIDO A WHATSAPP =====
-        // ===== ENVIAR PEDIDO A WHATSAPP =====
         function enviarPedidoWhatsApp(datos) {
-            // Construir mensaje
-            let mensaje = `*✨ NUEVO PEDIDO - MiTienda*%0A%0A`;
-            mensaje += `*📋 DATOS DEL CLIENTE:*%0A`;
-            mensaje += `📛 Nombre: ${datos.nombre}%0A`;
-            mensaje += `📲 Teléfono: ${datos.telefono}%0A`;
+            // Obtener número de pedido
+            const numeroPedido = obtenerSiguienteNumeroPedido();
 
-            if (datos.email) {
-                mensaje += `✉️ Email: ${datos.email}%0A`;
-            }
-
-            mensaje += `📍 Dirección: ${datos.direccion}%0A`;
-            mensaje += `💳 Método de Pago: ${datos.metodoPago}%0A`;
+            // Construir mensaje con \n (NO con %0A)
+            let mensaje = `*✨ NUMERO DE PEDIDO #${numeroPedido}*\n\n`;
+            mensaje += `*📋 TUD DATOS:*\n`;
+            mensaje += `📛 Nombre: ${datos.nombre}\n`;
 
             // Agregar información del pago
             const pagoRealizado = document.querySelector('input[name="pagoRealizado"]:checked').value;
             if (pagoRealizado === 'si') {
                 const referencia = document.getElementById('referenciaPago').value;
-                mensaje += `✅ Pago: Ya realizado%0A`;
-                mensaje += `🔢 Referencia: ${referencia}%0A`;
+                mensaje += `✅ Pago: Ya realizado\n`;
+                mensaje += `🔢 Referencia: ${referencia}\n`;
             } else {
-                mensaje += `⏳ Pago: Pendiente de realizar%0A`;
+                mensaje += `⏳ Pago: Pendiente de realizar\n`;
             }
 
             if (datos.notas) {
-                mensaje += `💬 Notas: ${datos.notas}%0A`;
+                mensaje += `💬 Notas: ${datos.notas}\n`;
             }
 
-            mensaje += `%0A*🛍️ PRODUCTOS:*%0A`;
+            mensaje += `\n*🛍️ TU PEDIDO:*\n\n`;
 
             let totalUSD = 0;
             let totalLocal = 0;
@@ -512,20 +660,27 @@
                 totalUSD += subtotalUSD;
                 totalLocal += subtotalLocal;
 
-                mensaje += `${index + 1}. ${item.nombre}%0A`;
-                mensaje += `   Cantidad: ${item.cantidad} × $${item.precio.toFixed(2)} = $${subtotalUSD.toFixed(2)}%0A`;
-                mensaje += `   ${SIMBOLO_LOCAL} ${(subtotalLocal).toFixed(2)}%0A%0A`;
+                mensaje += `${index + 1}. ${item.nombre}\n`;
+                mensaje += `   Cantidad: ${item.cantidad} × $${item.precio.toFixed(2)} = $${subtotalUSD.toFixed(2)}\n`;
+                mensaje += `   ${SIMBOLO_LOCAL} ${(subtotalLocal).toFixed(2)}\n\n`;
             });
 
-            mensaje += `*💵 TOTAL:*%0A`;
-            mensaje += `$${totalUSD.toFixed(2)} (${SIMBOLO_LOCAL} ${totalLocal.toFixed(2)})%0A%0A`;
-            mensaje += `*📅 Fecha del pedido:* ${new Date().toLocaleString('es-ES')}`;
+            mensaje += `*💵 TOTAL:*\n`;
+            mensaje += `$${totalUSD.toFixed(2)} (${SIMBOLO_LOCAL} ${totalLocal.toFixed(2)})\n\n`;
+            
+            // Fecha formateada
+            const fecha = new Date();
+            const fechaFormateada = `${fecha.getDate().toString().padStart(2, '0')}/${(fecha.getMonth() + 1).toString().padStart(2, '0')}/${fecha.getFullYear()} ${fecha.getHours().toString().padStart(2, '0')}:${fecha.getMinutes().toString().padStart(2, '0')}`;
+            mensaje += `*📅 Fecha del pedido:* ${fechaFormateada}`;
 
-            // Número de WhatsApp (cambiar por tu número)
-            const numeroWhatsApp = '+584121234567'; // ← CAMBIA ESTO POR TU NÚMERO
+            // Número de WhatsApp
+            const numeroWhatsApp = '+584142362414';
 
-            // Abrir WhatsApp
-            const url = `https://wa.me/${numeroWhatsApp.replace(/\D/g, '')}?text=${mensaje}`;
+            // CODIFICAR EL MENSAJE COMPLETO (esto convierte \n en %0A automáticamente)
+            const mensajeCodificado = encodeURIComponent(mensaje);
+
+            // URL CORRECTA (sin espacios!)
+            const url = `https://wa.me/${numeroWhatsApp.replace(/\D/g, '')}?text=${mensajeCodificado}`;
             window.open(url, '_blank');
         }
 
@@ -538,8 +693,19 @@
             submitBtn.disabled = true;
             submitBtn.innerHTML = 'Enviando...';
 
+            // ✅ Validar que haya selección del radio button
+            const pagoRealizadoRadio = document.querySelector('input[name="pagoRealizado"]:checked');
+
+            if (!pagoRealizadoRadio) {
+                alert('⚠️ Por favor selecciona si ya realizaste el pago o no');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+                return;
+            }
+
+            const pagoRealizado = pagoRealizadoRadio.value;
+
             // Validar referencia si el pago fue realizado
-            const pagoRealizado = document.querySelector('input[name="pagoRealizado"]:checked').value;
             if (pagoRealizado === 'si') {
                 const referencia = document.getElementById('referenciaPago').value;
                 if (!referencia || referencia.length !== 4 || !/^\d{4}$/.test(referencia)) {
@@ -553,10 +719,10 @@
             // Obtener datos del formulario
             const datos = {
                 nombre: document.getElementById('nombre').value,
-                telefono: document.getElementById('telefono').value,
-                email: document.getElementById('email').value,
-                direccion: document.getElementById('direccion').value,
-                metodoPago: document.getElementById('metodoPago').value,
+                //telefono: document.getElementById('telefono').value,//
+                //email: document.getElementById('email').value,//
+                //direccion: document.getElementById('direccion').value,//
+                //metodoPago: document.getElementById('metodoPago').value,//
                 notas: document.getElementById('notas').value
             };
 
