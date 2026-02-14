@@ -308,9 +308,9 @@ body {
     transition: var(--transition);
 }
 
-.oferta-card:hover {
+/*.oferta-card:hover {
     transform: scale(1.05);
-}
+}*/
 
 .oferta-badge {
     position: absolute;
