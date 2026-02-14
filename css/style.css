@@ -72,7 +72,7 @@ body {
 
 /* ===== HEADER ===== */
 .header {
-    background: rgb(150, 94, 235);
+    background: #ff9800;
     box-shadow: var(--box-shadow);
     position: sticky;
     top: 0;
