@@ -135,7 +135,7 @@ body {
 }
 
 .btn-cart {
-    background: #ff9800;
+    background: var(--secondary-color);
     border: 2px solid var(--primary-color);
     padding: 8px 16px;
     border-radius: 50px;
